@@ -14,13 +14,13 @@ class User extends \app\core\Controller{
 					// the user is correct!
 					// user can login
 					$_SESSION['user_id'] = $user->user_id;
-					header('location:/User/profile');
+					header('location:/Profile/index');
 				}else{
 					// the user is no correct
 					header('location:/User/index?error=Bad username/password combination');
 				}
 			}else{
-				// no such user so redirect
+				// no such user to redirect
 				header('location:/User/index?error=Bad username/password combination');
 			}
 		}else{
@@ -48,3 +48,4 @@ class User extends \app\core\Controller{
 			$this->view('User/register'); // TODO: add the new view file
 		}
 	}
+}

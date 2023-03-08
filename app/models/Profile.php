@@ -6,6 +6,7 @@ class Profile extends \app\core\Model{
 	public $first_name;
 	public $last_name;
 	public $middle_name;
+	public $picture;
 
 	public function getByUserId($user_id){
 		$SQL = "SELECT * FROM profile WHERE user_id=:user_id"; 
@@ -16,23 +17,25 @@ class Profile extends \app\core\Model{
 	}
 
 	public function insert(){
-		$SQL = "INSERT INTO profile (user_id,first_name,last_name,middle_name) VALUE (:user_id,:first_name,:last_name,:middle_name)"; 
+		$SQL = "INSERT INTO profile (user_id,first_name,last_name,middle_name, picture) VALUE (:user_id,:first_name,:last_name,:middle_name, :picture)"; 
 		$STH = $this->connection->prepare($SQL);
 		$data = ['user_id'=>$this->user_id,
 				'first_name'=>$this->first_name,
 				'last_name'=>$this->last_name,
-				'middle_name'=>$this->middle_name];
+				'middle_name'=>$this->middle_name,
+				'picture'=>$this->picture];
 		$STH->execute($data);
 		return $STH->rowCount();	
 	}
 
 	public function update(){
-		$SQL = "UPDATE `profile` SET `first_name`=:first_name,`last_name`=:last_name,`middle_name`=:middle_name WHERE user_id=:user_id"; 
+		$SQL = "UPDATE `profile` SET `first_name`=:first_name,`last_name`=:last_name,`middle_name`=:middle_name, `picture`=:picture WHERE user_id=:user_id"; 
 		$STH = $this->connection->prepare($SQL);
 		$data = ['user_id'=>$this->user_id,
 				'first_name'=>$this->first_name,
 				'last_name'=>$this->last_name,
-				'middle_name'=>$this->middle_name];
+				'middle_name'=>$this->middle_name,
+				'picture'=>$this->picture];
 		$STH->execute($data);
 		return $STH->rowCount();	
 	}

@@ -8,6 +8,15 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 </head>
 <body>
+	<div class="d-flex">
+
+		<ul>
+			<h1><a href="/Main/index">CliqueBait</a></h1>
+			<li><a href='/User/index'>Login</a></li>
+			<li><a href='/User/register'>register</a>			</li>
+			<li><a href='/Profile/index'>User Profile</a></li>
+		</ul>
+	
 	<div class="text-start">
 	<?php
 		if(isset($_GET['success'])){

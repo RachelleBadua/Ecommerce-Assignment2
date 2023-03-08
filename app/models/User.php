@@ -15,10 +15,10 @@ class User extends \app\core\Model{
 	}
 
 	public function insert(){
-		$SQL = 'INSERT INTO User(username, name, password_hash) VALUES (:username, :password_hash)'
-		$STH = $ths->connection->prepare($SQL);
+		$SQL = 'INSERT INTO User(username, password_hash) VALUES (:username, :password_hash)';
+		$STH = $this->connection->prepare($SQL);
 
 		$STH->execute(['username'=>$this->username, 'password_hash'=>$this->password_hash]);
-		return $this->connection->lastInsertedId();
+		return $this->connection->lastInsertId();
 	}
 }
