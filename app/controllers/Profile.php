@@ -18,6 +18,7 @@ class Profile extends \app\core\Controller{
 		header('location:/User/index');
 	}
 
+	#[\app\filters\Login]
 	public function create(){
 		// checks if button is clicked
 		if(isset($_POST['action'])){
@@ -35,34 +36,44 @@ class Profile extends \app\core\Controller{
             $uploadMessage = $uploadedPicture["upload_message"] == 'success' ? '' : '&error=Something went wrong '.$uploadedPicture["upload_message"];
 
 			$success = $profile->insert();
-			if($success)
-				header('location:/Profile/index?success=Profile created.');
-			else
-				header('location:/Profile/index?error=Something went wrong. You can only have one profile.');
+			if($success){
+				header('location:/Profile/index?success=Profile created.'.$uploadMessage);
+			}
+			else{
+				header('location:/Profile/index?error=Something went wrong. You can only have one profile.'.$uploadMessage);
+			}
 		}else{
 			$this->view('Profile/create');
 		}
 	}
 
+	#[\app\filters\Login]
 	public function edit(){
 		$profile = new \app\models\Profile();
 		$profile = $profile->getByUserId($_SESSION['user_id']);
 
 		if(isset($_POST['action'])){
-			
 			// do not need to delete user_id
 			// $profile->user_id = $_SESSION['user_id'];
 			$profile->first_name = $_POST['first_name'];
 			$profile->last_name = $_POST['last_name'];
 			$profile->middle_name = $_POST['middle_name'];
 
-			$uploadPicture = $this->uploadPicture($_SESSION['user_id']);
+			$uploadedPicture = $this->uploadPicture($_SESSION['user_id']);
+
+			if(isset($uploadedPicture['target_file'])){
+                $profile->picture = $uploadedPicture["target_file"];
+			}
+
+            $uploadMessage = $uploadedPicture["upload_message"] == 'success' ? '' : '&error=Something went wrong :)'.$uploadedPicture["upload_message"];
 
 			$success = $profile->update();
-			if($success)
-				header('location:/Profile/index?success=Profile modified.');
-			else
-				header('location:/Profile/index?error=Something went wrong.');
+			if($success) {
+				header('location:/Profile/index?success=Profile modified.'.$uploadMessage);
+			}
+			else {
+				header('location:/Profile/index?error=Something went wrong. :('.$uploadMessage);
+			}
 		}else{
 			$this->view('Profile/edit', $profile); // adding $profile tp view info, to fill the fields
 		}
@@ -70,19 +81,19 @@ class Profile extends \app\core\Controller{
 
 	public function uploadPicture($user_id){
 
-		$uploadedFile = array();
+        $uploadedFile = array();
 
-		if(isset($_FILES['profilePicture']) && ($_FILES['profilePicture']['error'] == UPLOAD_ERR_OK)){
+        if(isset($_FILES["profilePicture"]) && ($_FILES["profilePicture"]["error"] == UPLOAD_ERR_OK)){
 
-			$info = getimagesize($_FILES['profilePicture']['tmp_name']);
+            $info = getimagesize($_FILES["profilePicture"]["tmp_name"]);
 
-			$allowedTypes = ["jpg", "png", "gif"];
+            $allowedTypes = ["jpg", "png", "gif"];
 
-			$fileName = basename($_FILES["profilePicture"]["name"]);
+            $fileName = basename($_FILES["profilePicture"]["name"]);
 
             $fileType = strtolower(pathinfo($fileName,PATHINFO_EXTENSION));
 
-			if($info == false){
+            if($info == false){
 
                 $uploadedFile["upload_message"] = "Bad image file format!";
                 $uploadedFile["target_file"] = null;
@@ -93,9 +104,8 @@ class Profile extends \app\core\Controller{
                 $uploadedFile["target_file"] = null;
 
             }else{
-                // Save the image in the images folder
-                $path = 'images' .DIRECTORY_SEPARATOR;
-
+                // Save the image in the images folder of htdocs
+                $path ='images'.DIRECTORY_SEPARATOR;
                 $targetFileName = $user_id.'-'.uniqid().'.'.$fileType;
 
                 move_uploaded_file($_FILES["profilePicture"]["tmp_name"], $path.$targetFileName);
@@ -105,10 +115,13 @@ class Profile extends \app\core\Controller{
                 $uploadedFile["target_file"] = $targetFileName;
 
                 return  $uploadedFile;
+
             }
 
         }else{
-            $uploadedFile["upload_message"] = "Image not specified or not uploaded successfully.";
+
+            $uploadedFile["upload_message"] = "Image not specified or not uploaded successfully. :/";
+
             $uploadedFile["target_file"] = null;
         }
 

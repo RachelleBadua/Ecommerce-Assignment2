@@ -13,8 +13,9 @@
 		<ul>
 			<h1><a href="/Main/index">CliqueBait</a></h1>
 			<li><a href='/User/index'>Login</a></li>
-			<li><a href='/User/register'>register</a>			</li>
+			<li><a href='/User/register'>register</a></li>
 			<li><a href='/Profile/index'>User Profile</a></li>
+			<li><a href='/Publication/create'>Make a Publication</a></li>
 		</ul>
 	
 	<div class="text-start">

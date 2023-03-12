@@ -1,6 +1,6 @@
 <?php $this->view('shared/header', 'Register your account'); ?>
 <div class="container">
-	<form method ="post" action="">
+	<form method ="POST" action="">
 		<div class="form-group">
 			<label>Username:</label><input type="text" name="username" class="form-control"><br>
 		</div>
