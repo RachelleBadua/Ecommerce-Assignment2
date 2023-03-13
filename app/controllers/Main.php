@@ -3,7 +3,9 @@ namespace app\controllers;
 
 class Main extends \app\core\Controller{
 
-	function index(){
-		$this->view('Main/index');
+	public function index(){
+		$publication = new \app\models\Publication();
+		$publications = $publication->getAll();
+		$this->view('Main/index', $publications);
 	}
 }

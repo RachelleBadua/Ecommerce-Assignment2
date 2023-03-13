@@ -15,7 +15,7 @@
 			<li><a href='/User/index'>Login</a></li>
 			<li><a href='/User/register'>register</a></li>
 			<li><a href='/Profile/index'>User Profile</a></li>
-			<li><a href='/Publication/create'>Make a Publication</a></li>
+			<li><a href='/Publication/create'>Make a Post</a></li>
 		</ul>
 	
 	<div class="text-start">

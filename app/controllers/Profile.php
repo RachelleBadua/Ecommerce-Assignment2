@@ -8,7 +8,7 @@ class Profile extends \app\core\Controller{
 		$profile = new \app\models\Profile();
 		$profile = $profile->getByUserId($_SESSION['user_id']);
 		if($profile)
-			$this->view('Profile/index', $profile);
+			$this->view('Profile/details', $profile);
 		else 
 			header('location:/Profile/create');
 	}
@@ -127,4 +127,25 @@ class Profile extends \app\core\Controller{
 
         return $uploadedFile;
     }
+
+    public function details($user_id){//detailed view for a record
+		$profile = new \app\models\Profile();
+		$profile = $profile->getByUserId($user_id);
+		$this->view('Profile/details', $profile);
+	}
+
+	// public function getPublications($user_id){
+	// 	$SQL = "SELECT * FROM publication 
+	// 			WHERE profile_id=:profile_id 
+	// 			ORDER BY `timestamp` DESC";
+
+	// 	$STH = $this->connection->prepare($SQL);
+
+	// 	// $profile_ID = $_SESSION['user_id'];
+	// 	$STH->execute(['profile_id'=>$this->user_id]);
+
+	// 	$STH->setFetchMode(\PDO::FETCH_CLASS, 'app\models\Publication');
+
+	// 	return $STH->fetchAll();
+	// }
 }

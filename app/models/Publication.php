@@ -11,9 +11,9 @@ class Publication extends \app\core\Model{
 	public function insert(){
 		$SQL = "INSERT INTO publication (profile_id, picture, caption) VALUES (:profile_id, :picture, :caption)";
 		$STH = $this->connection->prepare($SQL);
-		$data = ['profile_id'=>$this->sender, 
-					'picture'=>$this->receiver,
-					'caption'=>$this->message];
+		$data = ['profile_id'=>$this->profile_id, 
+				'picture'=>$this->picture,
+				'caption'=>$this->caption];
 		$STH->execute($data);
 
 		$this->publication_id = $this->connection->lastInsertId();
@@ -30,8 +30,8 @@ class Publication extends \app\core\Model{
 	}
 
 	public function getAll(){
-		$SQL = "SELECT * FROM publication ORDER BY date_time DESC";
-		$STH = self::$_connection->prepare($SQL);
+		$SQL = "SELECT * FROM publication ORDER BY `timestamp` DESC";
+		$STH = $this->connection->prepare($SQL);
 		$STH-> execute();
 		$STH->setFetchMode(\PDO::FETCH_CLASS, 'app\\models\\Publication');
 		return $STH->fetchAll();
@@ -39,11 +39,19 @@ class Publication extends \app\core\Model{
 
 	public function get($publication_id){
 		$SQL = "SELECT * FROM publication WHERE publication_id=:publication_id";
-		$STH = self::$_connection->prepare($SQL);
+		$STH = $this->connection->prepare($SQL);
 		$STH->execute(['publication_id'=>$publication_id]);
 		$STH->setFetchMode(\PDO::FETCH_CLASS, 'app\models\Publication');
 		return $STH->fetch();
 	}
+
+	// public function getUserPublications($profile_id){
+	// 	$SQL = "SELECT * FROM publication WHERE profile_id=:profile_id";
+	// 	$STH = self::$_connection->prepare($SQL);
+	// 	$STH->execute(['publication_id'=>$publication_id]);
+	// 	$STH->setFetchMode(\PDO::FETCH_CLASS, 'app\models\Publication');
+	// 	return $STH->fetch();
+	// }
 
 	// public function getAllForUser($user_id){
 	// 	// $SQL = "SELECT * FROM message WHERE sender=:sender OR receiver=:receiver";

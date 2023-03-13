@@ -46,10 +46,18 @@ class Profile extends \app\core\Model{
     }
 
     public function getPublications(){
-        $SQL = "SELECT * FROM publication WHERE profile_id=:profile_id ORDER BY date_time DESC";
-        $STMT = self::$_connection->prepare($SQL);
-        $STMT->execute(['profile_id'=>$this->profile_id]);
-        $STMT->setFetchMode(\PDO::FETCH_CLASS, 'app\models\Publication');
-        return $STMT->fetchAll();
+        $SQL = "SELECT * FROM publication WHERE profile_id=:profile_id ORDER BY `timestamp` DESC";
+        $STH = $this->connection->prepare($SQL);
+        $STH->execute(['profile_id'=>$this->user_id]);
+        $STH->setFetchMode(\PDO::FETCH_CLASS, 'app\\models\\Publication');
+        return $STH->fetchAll();
     }
+
+    // public function getUserPublications($profile_id){
+    //     $SQL = "SELECT * FROM publication WHERE profile_id=:profile_id ORDER BY `timestamp` DESC";
+    //     $STH = $this->connection->prepare($SQL);
+    //     $STH->execute(['profile_id'=>$profile_id]);
+    //     $STH->setFetchMode(\PDO::FETCH_CLASS, 'app\models\Publication');
+    //     return $STH->fetch();
+    // }
 }
