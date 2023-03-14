@@ -5,7 +5,7 @@
 		$profile = $profile->getByUserId($data->profile_id);
 	?>
 	<img src="/images/<?= $data->picture?>" style="max-width:200px;max-height:200px"><br>
-	<div>posted by <?=$profile->first_name?></div>
+	<div>posted by <a href="/Profile/details/<?=$profile->user_id?>"><?=$profile->first_name . " " . $profile->middle_name . " " . $profile->last_name?></a></div>
 	<div>published on <?=$data->timestamp?></div>
 	<div>caption: <?=$data->caption?></div>
 	

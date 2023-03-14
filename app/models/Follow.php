@@ -10,7 +10,7 @@ class Follow extends \app\core\Model{
 		$SQL = "INSERT INTO follow (follower_id, followed_id) value (:follower_id, :followed_id)";
 		$STH = $this->connection->prepare($SQL);
 		$data = ['follower_id'=>$this->follower_id, 
-					'followed_id'=>$this->followed_id;
+				'followed_id'=>$this->followed_id;
 		$STH->execute($data);
 
 		$this->follower_id = $this->connection->lastInsertId();
@@ -24,8 +24,8 @@ class Follow extends \app\core\Model{
 		$STH->execute($data);
 	}
 
-	public function getAll(){
-		$SQL = "SELECT * FROM followe";
+	public function getAll($user_id){
+		$SQL = "SELECT * FROM follow WHERE follower = :user_id";
 		$STH = $this->connection->prepare($SQL);
 		$STH->execute();
 		$STH->setFetchMode(\PDO::FETCH_CLASS, 'app\\models\\Follow');
