@@ -17,16 +17,13 @@ class Publication extends \app\core\Model{
 		$STH->execute($data);
 
 		$this->publication_id = $this->connection->lastInsertId();
+		// return $STH->rowCount();
 	}
 
-	public function delete($publication_id, $user_id){
-		// TODO: only allow this if you are the owner
-		// only the owner of the message can delete it
-		$SQL = "DELETE FROM message WHERE publication_id=:publication_id AND profile_id = :profile_id"; 
+	public function deletePublication(){
+		$SQL = "DELETE FROM publication WHERE publication_id=:publication_id";
 		$STH = $this->connection->prepare($SQL);
-		$data = ['publication_id'=>$publication_id, 'profile_id'=>$profile_id];
-		$STH->execute($data);
-		return $STH->rowCount(); // gives the amount of rows in the table 
+		$STH->execute(['publication_id'=>$this->publication_id]);
 	}
 
 	public function getAll(){
@@ -37,33 +34,34 @@ class Publication extends \app\core\Model{
 		return $STH->fetchAll();
 	}
 
-	public function get($publication_id){
+	public function getPublication($publication_id){
 		$SQL = "SELECT * FROM publication WHERE publication_id=:publication_id";
 		$STH = $this->connection->prepare($SQL);
 		$STH->execute(['publication_id'=>$publication_id]);
-		$STH->setFetchMode(\PDO::FETCH_CLASS, 'app\models\Publication');
+		$STH->setFetchMode(\PDO::FETCH_CLASS, 'app\\models\\Publication');
 		return $STH->fetch();
 	}
 
-	// public function getUserPublications($profile_id){
-	// 	$SQL = "SELECT * FROM publication WHERE profile_id=:profile_id";
-	// 	$STH = self::$_connection->prepare($SQL);
-	// 	$STH->execute(['publication_id'=>$publication_id]);
-	// 	$STH->setFetchMode(\PDO::FETCH_CLASS, 'app\models\Publication');
-	// 	return $STH->fetch();
-	// }
+	public function searchPost($caption){
+		$SQL = "SELECT * FROM publication 
+				WHERE caption LIKE :caption 
+				ORDER BY timestamp DESC";
+		$STH = $this->connection->prepare($SQL);
+		$data = ['caption' => "%$caption%"];
+		$STH->execute($data);
+		$STH->setFetchMode(\PDO::FETCH_CLASS,'app\\models\\Publication');
+		return $STH->fetchAll();
+	}
 
-	// public function getAllForUser($user_id){
-	// 	// $SQL = "SELECT * FROM message WHERE sender=:sender OR receiver=:receiver";
-	// 	$SQL = "SELECT message.message_id, message.message, message.timestamp, sendertable.username AS sender_name, `user`.`username` AS receiver_name FROM `message` JOIN `user` AS sendertable ON `message`.`sender` = sendertable.`user_id` JOIN `user` ON `user`.`user_id` = message.receiver WHERE sender=:sender OR receiver=:receiver";
-		
-	// 	$STH = $this->connection->prepare($SQL);
-	// 	$data = ['receiver'=>$user_id, 
-	// 				'sender'=>$user_id];
-	// 	$STH->execute($data);
-	// 	$STH->setFetchMode(\PDO::FETCH_CLASS, 'app\\models\\Message');
-	// 	return $STH->fetchAll(); // gets the Messages from database with an array
-	// }
-
-
+	public function update(){
+		//modify object without changing the user_id
+		$SQL = "UPDATE `publication` SET `caption`=:caption WHERE publication_id=:publication_id";
+		$STH = $this->connection->prepare($SQL);
+		$data = [
+			'caption'=>$this->caption,
+			'publication_id'=>$this->publication_id
+		];
+		$STH->execute( $data );
+		return $STH->rowCount();
+	}
 }

@@ -128,6 +128,7 @@ class Profile extends \app\core\Controller{
         return $uploadedFile;
     }
 
+    #[\app\filters\Login]
     public function details($user_id){//detailed view for a record
 		$profile = new \app\models\Profile();
 		$profile = $profile->getByUserId($user_id);

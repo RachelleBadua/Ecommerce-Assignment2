@@ -8,5 +8,16 @@
 	<div>posted by <?=$profile->first_name?></div>
 	<div>published on <?=$data->timestamp?></div>
 	<div>caption: <?=$data->caption?></div>
+	
+	<div>
+		<?php
+			if(isset($_SESSION['user_id']) && ($_SESSION['user_id'] == $data->profile_id)){
+				echo "
+					<a class='' href='/Publication/delete/$data->publication_id'>delete</a>
+					<a class='button' href='/Publication/edit/$data->publication_id'>edit</a>
+				";	
+			}
+		?>
+		</div>
 	<div>-----------------------------------------------</div><br>
 </div>

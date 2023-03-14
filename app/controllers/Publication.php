@@ -20,27 +20,14 @@ class Publication extends \app\core\Controller{
 
             $success = $publication->insert();
 			if($success){
-				header('location:/Profile/details?success=Post created.'.$uploadMessage);
+               
+				header('location:/Profile/details/?success=Post created.'.$uploadMessage);
 			}
 			else{
 				header('location:/Publication/create?error=Something went wrong.'.$uploadMessage);
 			}
 		}else{
 			$this->view('Publication/create');
-		}
-	}
-
-	#[\app\filters\Login]
-	// #[\app\filters\Profile]
-	public function edit($publication_id){
-		$publication = new \app\models\Publication();
-		$publication = $publication->get($publication_id);
-		if(isset($_POST['action']) && $publication->profile_id == $_SESSION['profile_id']){
-			$publication->caption = $_POST['caption'];
-			$publication->update();
-			header('location:/Profile/index/');
-		}else{
-			$this->view('Publication/edit', $publication);
 		}
 	}
 
@@ -76,4 +63,41 @@ class Publication extends \app\core\Controller{
         }
         return $uploadedFile;
 	}
+
+ 	public function searchPost(){
+        $publication = new \app\models\Publication();
+        $publications = $publication->searchPost($_GET['searchByCaption']);
+        $this->view('Main/index',$publications);
+    }
+
+    #[\app\filters\Login]
+    public function edit($publication_id){
+        $publication = new \app\models\publication();
+        $publication = $publication->getPublication($publication_id);
+
+        if(isset($_POST['edit'])){
+            //we just change the caption
+            $publication->caption = $_POST['caption']; 
+            $success = $publication->update();                  
+            if($success){
+                header('location:/Profile/index?success=Post was successfully modified.');
+            }else{
+                header('location:/Profile/index?error=Something went wrong when editting your post.');
+            }
+        }else{
+            $this->view('Publication/edit', $publication);  //adding $profile so we can view the information
+        }
+    }
+
+    #[\app\filters\Login]
+    public function delete($publication_id){
+        $publication = new \app\models\Publication();
+        $publication = $publication->getPublication($publication_id);
+
+        if($publication->profile_id == $_SESSION['user_id']){
+            unlink("images/$publication->picture");
+            $publication->deletePublication();
+        }
+        header('location:/Profile/index/');
+    }
 }
