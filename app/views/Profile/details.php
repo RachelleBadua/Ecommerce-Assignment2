@@ -48,13 +48,21 @@ foreach ($publications as $publication) {
 }
 ?>
 
-<h1>My followers</h1>
+<h1>People following <?=$data->first_name?></h1>
 <ul>
 <?php
 $followers = $data->getFollowers();
 foreach ($followers as $follower) { ?>
 
-<li><a href="/Profile/details/<?=$profile->user_id?>"><?=$profile->first_name . " " . $profile->middle_name . " " . $profile->last_name?></a></li>
+<li>
+	<a href="/Profile/details/<?=$follower->follower_id?>">
+		<?php 
+			$follows = new \app\models\Profile();
+			$follows = $follows->getByUserId($follower->follower_id); 
+		?>
+		<?=$follows->first_name . " " . $follows->middle_name . " " . $follows->last_name?>
+	</a>
+</li>
 
 <?php
 }

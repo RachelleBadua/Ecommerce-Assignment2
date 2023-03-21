@@ -54,9 +54,9 @@ class Profile extends \app\core\Model{
     }
 
     public function getFollowers(){
-        $SQL = "SELECT * FROM follow WHERE follower_id=:follower_id";
+        $SQL = "SELECT * FROM follow WHERE followed_id=:followed_id";
         $STH = $this->connection->prepare($SQL);
-        $STH->execute(['follower_id'=>$this->user_id]);
+        $STH->execute(['followed_id'=>$this->user_id]);
         $STH->setFetchMode(\PDO::FETCH_CLASS, 'app\\models\\Publication');
         return $STH->fetchAll();
     }
