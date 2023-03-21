@@ -53,11 +53,13 @@ class Profile extends \app\core\Model{
         return $STH->fetchAll();
     }
 
-    // public function getUserPublications($profile_id){
-    //     $SQL = "SELECT * FROM publication WHERE profile_id=:profile_id ORDER BY `timestamp` DESC";
-    //     $STH = $this->connection->prepare($SQL);
-    //     $STH->execute(['profile_id'=>$profile_id]);
-    //     $STH->setFetchMode(\PDO::FETCH_CLASS, 'app\models\Publication');
-    //     return $STH->fetch();
-    // }
+    public function getFollowers(){
+        $SQL = "SELECT * FROM follow WHERE follower_id=:follower_id";
+        $STH = $this->connection->prepare($SQL);
+        $STH->execute(['follower_id'=>$this->user_id]);
+        $STH->setFetchMode(\PDO::FETCH_CLASS, 'app\\models\\Publication');
+        return $STH->fetchAll();
+    }
+
+    
 }

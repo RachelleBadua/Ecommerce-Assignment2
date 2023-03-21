@@ -13,17 +13,17 @@
 
 
 <?php
-					if($_SESSION['user_id'] != $data->user_id){
-						//$this here is profile
-						$checkFollowing = $this->checkIfFollowing($data->user_id);
-						if($checkFollowing == true){	
-							//does not exits
-							echo '<a href=',"/Follow/unfollowUser/$data->user_id",'>Unfollow</a>';
-						}else{
-							//does exist
-							echo '<a href=',"/Follow/followUser/$data->user_id",'>Follow</a>';
-						}
-					}
+	if($_SESSION['user_id'] != $data->user_id){
+		//$this here is profile
+		$checkFollowing = $this->checkIfFollowing($data->user_id);
+		if($checkFollowing == true){	
+			//does not exits
+			echo '<a href=',"/Follow/unfollowUser/$data->user_id",'>Unfollow</a>';
+		}else{
+			//does exist
+			echo '<a href=',"/Follow/followUser/$data->user_id",'>Follow</a>';
+		}
+	}
 ?>
 
 <?php
@@ -47,6 +47,22 @@ foreach ($publications as $publication) {
 	$this->view('Publication/post', $publication);
 }
 ?>
+
+<h1>My followers</h1>
+<ul>
+<?php
+$followers = $data->getFollowers();
+foreach ($followers as $follower) { ?>
+
+<li><a href="/Profile/details/<?=$profile->user_id?>"><?=$profile->first_name . " " . $profile->middle_name . " " . $profile->last_name?></a></li>
+
+<?php
+}
+?>
+
+</ul>
+	
+
 </div>
 
 

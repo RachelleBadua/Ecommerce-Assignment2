@@ -135,18 +135,14 @@ class Profile extends \app\core\Controller{
 		$this->view('Profile/details', $profile);
 	}
 
-	// public function getPublications($user_id){
-	// 	$SQL = "SELECT * FROM publication 
-	// 			WHERE profile_id=:profile_id 
-	// 			ORDER BY `timestamp` DESC";
+	#[\app\filters\Login]
+	public function checkIfFollowing($profile_id){
+        $follow = new \app\models\Follow();
+        $follow->follower_id = $_SESSION['user_id'];
+        $follow->followed_id = $profile_id;
 
-	// 	$STH = $this->connection->prepare($SQL);
+        $boolean = $follow->isFollowing();
 
-	// 	// $profile_ID = $_SESSION['user_id'];
-	// 	$STH->execute(['profile_id'=>$this->user_id]);
-
-	// 	$STH->setFetchMode(\PDO::FETCH_CLASS, 'app\models\Publication');
-
-	// 	return $STH->fetchAll();
-	// }
+        return $boolean;
+    }
 }
